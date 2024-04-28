@@ -1,18 +1,15 @@
-class Register {
-  bool? error;
-  String? message;
+import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'register.g.dart';
+part 'register.freezed.dart';
 
-  Register({this.error, this.message});
+@freezed
+class Register with _$Register{
+  const factory Register({
+     bool? error,
+     String? message,
+  }) = _Register;
 
-  Register.fromJson(Map<String, dynamic> json) {
-    error = json['error'];
-    message = json['message'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['error'] = error;
-    data['message'] = message;
-    return data;
-  }
+  factory Register.fromJson(Map<String, dynamic> json) =>
+      _$RegisterFromJson(json);
 }
