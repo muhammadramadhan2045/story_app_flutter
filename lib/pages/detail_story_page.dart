@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/provider/detail_story_provider.dart';
 
-import '../provider/story_provider.dart';
-
 class DetailStoryPage extends StatelessWidget {
   final String storyId;
 
@@ -41,8 +39,9 @@ class DetailStoryPage extends StatelessWidget {
                         ),
                         const Text(
                           "Name",
-                          style: TextStyle(fontWeight: FontWeight.w500
-                          ,fontSize: 20,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
                           ),
                         ),
                         Text(state.detailStory.story?.name ?? ""),
@@ -51,8 +50,9 @@ class DetailStoryPage extends StatelessWidget {
                         ),
                         const Text(
                           "Description",
-                          style: TextStyle(fontWeight: FontWeight.w500
-                            ,fontSize: 20,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
                           ),
                         ),
                         Text(state.detailStory.story?.description ?? ""),

@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/data/model/login.dart';
 import 'package:story_app/data/model/register.dart';
 import 'package:story_app/data/service/api_service.dart';
-import 'package:story_app/pages/login_page.dart';
 import '../data/db/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -42,7 +40,7 @@ class AuthProvider extends ChangeNotifier {
       _token = '';
       _message = e.toString();
       debugPrint(e.toString());
-      return Login();
+      return const Login();
     } finally {
       isLoadingLogin = false;
       notifyListeners();
@@ -61,13 +59,12 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
       _message = "Gagal Register";
-      return Register();
+      return const Register();
     } finally {
       isLoadingRegister = false;
       notifyListeners();
     }
   }
-
 
   Future<void> logout() async {
     isLoadingLogout = true;
@@ -87,7 +84,9 @@ class AuthProvider extends ChangeNotifier {
   //get user token
   Future<void> getUserToken() async {
     _token = await authRepository.getUser();
-    print('Token: $_token');
+    if (kDebugMode) {
+      print('Token: $_token');
+    }
     notifyListeners();
   }
 }

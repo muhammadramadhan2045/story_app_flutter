@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:story_app/data/db/auth_repository.dart';
 import 'package:story_app/data/model/detail_story.dart';
 
 import '../data/service/api_service.dart';
-
 
 class DetailStoryProvider extends ChangeNotifier {
   final String storyId;
@@ -41,7 +39,7 @@ class DetailStoryProvider extends ChangeNotifier {
       _message = e.toString();
       _isLoading = false;
       notifyListeners();
-      return DetailStory();
+      return const DetailStory();
     }
   }
 }

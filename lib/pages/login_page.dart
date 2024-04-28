@@ -26,10 +26,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(
-        "apakah sudah: ${Provider.of<AuthProvider>(context, listen: false).token}");
+    debugPrint(
+      "apakah sudah: ${Provider.of<AuthProvider>(context, listen: false).token}",
+    );
   }
 
   @override

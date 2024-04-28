@@ -36,9 +36,9 @@ class StoryProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
       isLoading = false;
-      _setStory(Story());
+      _setStory(const Story());
       notifyListeners();
-      return Story();
+      return const Story();
     }
   }
 
@@ -55,7 +55,7 @@ class StoryProvider extends ChangeNotifier {
       debugPrint(e.toString());
       isLoading = false;
       notifyListeners();
-      return DetailStory();
+      return const DetailStory();
     }
   }
 }

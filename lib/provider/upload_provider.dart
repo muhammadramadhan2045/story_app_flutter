@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:story_app/data/model/add_story.dart';
 import 'package:image/image.dart' as img;
-import 'package:story_app/provider/story_provider.dart';
 import '../data/db/auth_repository.dart';
 import '../data/service/api_service.dart';
 

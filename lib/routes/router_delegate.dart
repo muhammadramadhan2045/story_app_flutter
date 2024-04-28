@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:story_app/data/service/api_service.dart';
 import 'package:story_app/pages/add_story_page.dart';
 import 'package:story_app/pages/detail_story_page.dart';
@@ -119,7 +118,8 @@ class MyRouterDelegate extends RouterDelegate
               isAddStory = true;
               notifyListeners();
             },
-            story: StoryProvider(authRepository,ApiService()).story ?? Story(),
+            story: StoryProvider(authRepository, ApiService()).story ??
+                const Story(),
           ),
         ),
         if (selectedStory != null)

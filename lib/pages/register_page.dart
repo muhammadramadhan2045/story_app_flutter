@@ -36,7 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: ListView(
         children: [
           const GradientBackground(
@@ -115,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 emailController.text,
                                 passwordController.text,
                               );
-                              print("result register: ${result.message}");
+                              debugPrint("result register: ${result.message}");
                               if (result.message == "User created") {
                                 scaffoldMessenger.showSnackBar(
                                   const SnackBar(

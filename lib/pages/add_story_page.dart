@@ -101,6 +101,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
     debugPrint("Upload diklik");
     final provider = context.read<AddStoryProvider>();
     final uploadProvider = context.read<UploadProvider>();
+    final storyProvider = context.read<StoryProvider>();
     final ScaffoldMessengerState scaffoldMessengerState =
         ScaffoldMessenger.of(context);
     final imagePath = provider.imagePath;
@@ -122,7 +123,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
     scaffoldMessengerState.showSnackBar(
       SnackBar(content: Text(uploadProvider.message)),
     );
-    context.read<StoryProvider>().getStory();
+    storyProvider.getStory();
     widget.onBack();
   }
 

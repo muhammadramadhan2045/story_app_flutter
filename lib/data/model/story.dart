@@ -1,4 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'story.g.dart';
 part 'story.freezed.dart';
@@ -42,11 +41,11 @@ class ListStory with _$ListStory {
   const factory ListStory({
     String? id,
     String? name,
-     String? description,
-     String? photoUrl,
-     String? createdAt,
-     double? lat,
-     double? lon,
+    String? description,
+    String? photoUrl,
+    String? createdAt,
+    double? lat,
+    double? lon,
   }) = _ListStory;
 
   factory ListStory.fromJson(Map<String, dynamic> json) =>
