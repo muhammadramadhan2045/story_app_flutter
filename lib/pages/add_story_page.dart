@@ -67,6 +67,12 @@ class _AddStoryPageState extends State<AddStoryPage> {
                     hintText: "Description",
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Description is required";
+                    }
+                    return null;
+                  },
                 ),
               ),
             ),
