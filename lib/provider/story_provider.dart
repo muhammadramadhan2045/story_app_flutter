@@ -69,4 +69,16 @@ class StoryProvider extends ChangeNotifier {
       return const DetailStory();
     }
   }
+
+  Future<void> refreshStory() async {
+    pageItems = 1;
+    stories = [];
+    await getStory();
+  }
+
+  Future<void> clearStory() async {
+    pageItems = 1;
+    stories = [];
+    notifyListeners();
+  }
 }

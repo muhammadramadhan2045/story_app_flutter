@@ -57,7 +57,9 @@ class _ListStoryPageState extends State<ListStoryPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: widget.toAddStory,
+            onPressed: () {
+              widget.toAddStory();
+            },
             icon: const Icon(Icons.add),
           ),
         ],

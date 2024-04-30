@@ -151,7 +151,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
     scaffoldMessengerState.showSnackBar(
       SnackBar(content: Text(uploadProvider.message)),
     );
-    storyProvider.getStory();
+
+    storyProvider.refreshStory();
     widget.onBack();
     provider.clearLatLon();
   }
