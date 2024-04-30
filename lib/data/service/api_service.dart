@@ -42,9 +42,9 @@ class ApiService {
   }
 
   //get story
-  Future<Story> getStory(String token) async {
+  Future<Story> getStory(String token, [int page = 1, int size = 10]) async {
     final response = await http.get(
-      Uri.parse('${baseUrl}stories'),
+      Uri.parse('${baseUrl}stories?page=$page&size=$size'),
       headers: <String, String>{
         'Authorization': 'Bearer $token',
       },

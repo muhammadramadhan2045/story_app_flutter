@@ -14,9 +14,12 @@ class StoryProvider extends ChangeNotifier {
   }
 
   Story? _story;
-
+  List<ListStory> stories = [];
   Story? get story => _story;
   bool isLoading = false;
+
+  int? pageItems = 1;
+  int sizeItems = 10;
 
   void _setStory(Story story) {
     _story = story;
@@ -24,13 +27,21 @@ class StoryProvider extends ChangeNotifier {
   }
 
   Future<Story> getStory() async {
-    isLoading = true;
-    notifyListeners();
     try {
+      if (pageItems == 1) {
+        isLoading = true;
+        notifyListeners();
+      }
       final token = await authRepository.getUser();
-      final story = await apiService.getStory(token);
+      final story = await apiService.getStory(token, pageItems!, sizeItems);
+      stories.addAll(story.listStory ?? []);
+      if ((story.listStory?.length ?? 0) < sizeItems) {
+        pageItems = null;
+      } else {
+        pageItems = pageItems! + 1;
+      }
       isLoading = false;
-      _setStory(story);
+      //_setStory(story);
       notifyListeners();
       return story;
     } catch (e) {
