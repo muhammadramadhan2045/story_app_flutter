@@ -72,8 +72,14 @@ class ApiService {
   }
 
   //add story as guest
-  Future<AddStory> uploadDocumentAsGuest(List<int> bytes, String fileName,
-      String description, String token) async {
+  Future<AddStory> uploadDocumentAsGuest(
+    List<int> bytes,
+    String fileName,
+    String description,
+    String token, [
+    String? lat,
+    String? lon,
+  ]) async {
     const String url = "https://story-api.dicoding.dev/v1/stories";
 
     final uri = Uri.parse(url);
@@ -93,6 +99,11 @@ class ApiService {
       "Content-type": "multipart/form-data",
       'Authorization': 'Bearer $token',
     };
+
+    // Tambahkan lat dan lon ke fields hanya jika mereka tidak null
+    if (lat != null && lon != null) {
+      fields.addAll({"lat": lat, "lon": lon});
+    }
 
     request.files.add(multiPartFile);
     request.fields.addAll(fields);

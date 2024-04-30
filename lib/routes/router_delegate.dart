@@ -3,6 +3,7 @@ import 'package:story_app/data/service/api_service.dart';
 import 'package:story_app/pages/add_story_page.dart';
 import 'package:story_app/pages/detail_story_page.dart';
 import 'package:story_app/pages/login_page.dart';
+import 'package:story_app/pages/maps_page.dart';
 import 'package:story_app/pages/register_page.dart';
 import 'package:story_app/provider/story_provider.dart';
 
@@ -32,6 +33,7 @@ class MyRouterDelegate extends RouterDelegate
   bool? isLoggedIn;
   bool isRegister = false;
   bool isAddStory = false;
+  bool isToMap = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +60,7 @@ class MyRouterDelegate extends RouterDelegate
         isRegister = false;
         selectedStory = null;
         isAddStory = false;
+        isToMap = false;
         notifyListeners();
         return true;
       },
@@ -131,12 +134,27 @@ class MyRouterDelegate extends RouterDelegate
           ),
         if (isAddStory == true)
           MaterialPage(
-              key: const ValueKey("AddStoryPage"),
-              child: AddStoryPage(
-                onBack: () {
-                  isAddStory = false;
-                  notifyListeners();
-                },
-              )),
+            key: const ValueKey("AddStoryPage"),
+            child: AddStoryPage(
+              onBack: () {
+                isAddStory = false;
+                notifyListeners();
+              },
+              toMaps: () {
+                isToMap = true;
+                notifyListeners();
+              },
+            ),
+          ),
+        if (isToMap == true)
+          MaterialPage(
+            key: const ValueKey("MapsPage"),
+            child: MapsPage(
+              onBack: () {
+                isToMap = false;
+                notifyListeners();
+              },
+            ),
+          ),
       ];
 }

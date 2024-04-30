@@ -2,17 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/provider/add_story_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 import '../provider/story_provider.dart';
 import '../provider/upload_provider.dart';
 
 class AddStoryPage extends StatefulWidget {
   final Function() onBack;
-
-  const AddStoryPage({super.key, required this.onBack});
+  final Function() toMaps;
+  const AddStoryPage({super.key, required this.onBack, required this.toMaps});
 
   @override
   State<AddStoryPage> createState() => _AddStoryPageState();
@@ -20,6 +22,8 @@ class AddStoryPage extends StatefulWidget {
 
 class _AddStoryPageState extends State<AddStoryPage> {
   final descController = TextEditingController();
+  late GoogleMapController mapController;
+  geo.Placemark? placemark;
 
   @override
   void dispose() {
@@ -29,6 +33,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mapProvider = Provider.of<AddStoryProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Story'),
@@ -42,56 +47,71 @@ class _AddStoryPageState extends State<AddStoryPage> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 2,
-              child: context.watch<AddStoryProvider>().imagePath == null
-                  ? const Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.image,
-                        size: 100,
-                      ),
-                    )
-                  : _showImage(),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: TextFormField(
-                  controller: descController,
-                  decoration: const InputDecoration(
-                    hintText: "Description",
-                    border: OutlineInputBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: context.watch<AddStoryProvider>().imagePath == null
+                    ? const Align(
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.image,
+                          size: 100,
+                        ),
+                      )
+                    : _showImage(),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: descController,
+                    decoration: const InputDecoration(
+                      hintText: "Description",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Description is required";
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Description is required";
-                    }
-                    return null;
-                  },
                 ),
               ),
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => _onGalleryView(),
-                    child: const Text("Gallery"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _onCameraView(),
-                    child: const Text("Camera"),
-                  ),
-                ],
+              ElevatedButton.icon(
+                onPressed: () {
+                  widget.toMaps();
+                },
+                icon: const Icon(
+                  Icons.location_on_outlined,
+                ),
+                label: mapProvider.lat != null && mapProvider.lon != null
+                    ? const Text("Change location")
+                    : const Text("Input location"),
               ),
-            )
-          ],
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => _onGalleryView(),
+                      child: const Text("Gallery"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _onCameraView(),
+                      child: const Text("Camera"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -113,7 +133,15 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
     final newBytes = await uploadProvider.compressImage(bytes);
 
-    await uploadProvider.uploadImage(newBytes, fileName, descController.text);
+    provider.lat != null && provider.lon != null
+        ? await uploadProvider.uploadImage(
+            newBytes,
+            fileName,
+            descController.text,
+            provider.lat.toString(),
+            provider.lon.toString())
+        : await uploadProvider.uploadImage(
+            newBytes, fileName, descController.text);
 
     if (uploadProvider.uploadResponse != null) {
       provider.setImageFile(null);
@@ -125,6 +153,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
     );
     storyProvider.getStory();
     widget.onBack();
+    provider.clearLatLon();
   }
 
   _onGalleryView() async {

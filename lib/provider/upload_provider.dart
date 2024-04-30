@@ -15,8 +15,8 @@ class UploadProvider extends ChangeNotifier {
   String message = "";
   AddStory? uploadResponse;
 
-  Future<void> uploadImage(
-      List<int> bytes, String fileName, String description) async {
+  Future<void> uploadImage(List<int> bytes, String fileName, String description,
+      [String? lat, String? lon]) async {
     try {
       message = "";
       uploadResponse = null;
@@ -24,8 +24,11 @@ class UploadProvider extends ChangeNotifier {
       notifyListeners();
 
       final token = await AuthRepository().getUser();
-      uploadResponse = await apisService.uploadDocumentAsGuest(
-          bytes, fileName, description, token);
+      uploadResponse = lon != null && lat != null
+          ? await apisService.uploadDocumentAsGuest(
+              bytes, fileName, description, token, lat, lon)
+          : await apisService.uploadDocumentAsGuest(
+              bytes, fileName, description, token);
       message = uploadResponse?.message ?? "success";
       isUploading = false;
       notifyListeners();
